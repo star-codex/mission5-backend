@@ -1,0 +1,12 @@
+{
+  "name": "mission5-backend",
+  "version": "1.0.0",
+  "description": "Backend infrastructure for Mission 5 using Node &amp; Express, including Docker container.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

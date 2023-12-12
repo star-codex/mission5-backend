@@ -1,7 +1,7 @@
 {
 	"name": "mission5-backend",
 	"version": "1.0.0",
-	"description": "Backend infrastructure for Mission 5 using Node &amp; Express, including Docker container.",
+	"description": "Backend infrastructure for Mission 5 using Node and Express, including Docker container.",
 	"main": "index.js",
 	"scripts": {
 		"start": "node app.js",
@@ -11,6 +11,7 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"express": "^4.18.2"
+		"express": "^4.18.2",
+		"mongoose": "^8.0.3"
 	}
 }

@@ -8,3 +8,11 @@ services:
       - "3000:3000"
     volumes:
       - .:/usr/src/app
+    depends_on:
+      - mongo # ensures that the Node.js application only starts after the MongoDB service is ready
+  mongo:
+    image: mongo:latest # uses the official MongoDB image from Docker Hub
+    ports:
+      - "27017:27017" #  maps port 27017 from the host to port 27017 in the MongoDB container
+    volumes:
+      - ./data/db:/data/db  # Persist data between container restarts

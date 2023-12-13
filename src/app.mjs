@@ -1,10 +1,12 @@
 // Server-side code using ES6 syntax
 import express from 'express';
 import mongoose from 'mongoose';
+import { fileURLToPath } from 'url';
 import path from 'path';
 import { dirname } from 'path';
-
+const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
 const app = express();
 const port = 3000;
 
@@ -17,7 +19,7 @@ app.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
-mongoose.connect('mongodb://localhost:27017/mission5');
+mongoose.connect('mongodb://mongo:27017/mission5');
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));

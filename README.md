@@ -28,7 +28,10 @@ Simple backend infrastructure for Mission 5 using Node and Express, all neatly p
 
 * Open <http://localhost:3000/>
 * Enter a message like "Hello World!"
-* Refresh page and click "Fetch Messages" to retrieve
+* The stored messages are displayed to see as you add them.
+* Click delete to clear the database.
+* If you refresh the page and click retrieve, it will show stored messages.
+* If you refresh the page and click delete, it will delete the stored messages.
 
 ### Closing the program
 

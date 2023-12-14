@@ -53,6 +53,16 @@ app.get('/fetch', async (req, res) => {
 	}
 });
 
+app.delete('/delete', async (req, res) => {
+	try {
+		await Message.deleteMany(); // Delete all messages
+		res.send('Messages deleted successfully!');
+	} catch (error) {
+		console.error('Error deleting messages:', error);
+		res.status(500).send('Internal Server Error');
+	}
+});
+
 export default app;
 
 app.listen(port, () => {

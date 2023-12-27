@@ -1,0 +1,175 @@
+<!-- booking.html -->
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="styles.css" />
+		<script
+			src="https://kit.fontawesome.com/71cda4955c.js"
+			crossorigin="anonymous"
+		></script>
+		<title>Booking Page</title>
+		<style>
+			.propertyImage {
+				max-width: 100%;
+				height: auto;
+				display: block; /* To remove extra space under the image */
+				margin: 0 auto; /* To center the image */
+			}
+			/* Add your existing styles here */
+			hr {
+				width: 90%;
+				margin: 0 auto;
+				border: 1px solid #ccc; /* Change border color as needed */
+			}
+			.caution-container {
+				text-align: center;
+				margin-top: 20px;
+			}
+			.caution-icon {
+				color: red;
+			}
+		</style>
+	</head>
+	<body>
+		<header>
+			<div class="logo">
+				<img src="metrowhite.png" alt="Logo" class="logo-img" />
+			</div>
+			<div class="menu">
+				<img src="menu-bar.png" alt="Burger Menu Icon" class="burger-menu" />
+			</div>
+		</header>
+
+		<main>
+			<div class="container" id="propertyContainer">
+				<!-- Property information will be dynamically added here -->
+			</div>
+			<div class="container" id="staticDataContainer">
+				<hr />
+				<!-- Top Page break -->
+				<div class="caution-container">
+					<i class="fas fa-exclamation-triangle caution-icon"></i>
+					<p style="color: #801f1e">
+						To ensure your viewing of this property, you must register. If you
+						do not register, the viewing may not be confirmed. By registering
+						you will be automatically advised of any changes, updates or future
+						viewings.
+					</p>
+				</div>
+				<hr />
+				<!-- Bottom Page break -->
+				<br /><br />
+				<h2>Your details</h2>
+				<p><input type="text" placeholder="First name" /></p>
+				<p><input type="text" placeholder="Last name" /></p>
+				<p><input type="tel" placeholder="Phone" /></p>
+				<p><input type="email" placeholder="Email" /></p>
+				<p><textarea placeholder="Comment"></textarea></p>
+				<br /><br />
+				<h2>Select your preferred date and time</h2>
+				<p><i class="far fa-calendar-alt"></i> <input type="date" /></p>
+				<p><i class="far fa-clock"></i> <input type="time" /></p>
+				<br /><br />
+				<button class="red-button" onclick="redirectToConfirmation()">Confirm</button>
+			</div>
+		</main>
+
+		<footer>
+			<div class="footer-container">
+				<img src="metroblack.png" alt="Logo" class="logo-img" />
+				<br />
+				<div class="column">
+					<h3>QUICK LINKS</h3>
+					<ul>
+						<li><a href="#">PROPERTY OWNERS</a></li>
+						<li><a href="#">TENANTS</a></li>
+						<li><a href="#">NEWS</a></li>
+						<li><a href="#">ABOUT US</a></li>
+					</ul>
+				</div>
+				<div class="column">
+					<h3>CONTACT US</h3>
+					<ul class="fa-ul">
+						<li>
+							<span class="fa-li"><i class="fas fa-phone"></i></span>
+							<p>09 391 4642</p>
+						</li>
+						<li>
+							<span class="fa-li"><i class="far fa-envelope"></i></span>
+							<p>info@metronz.co.nz</p>
+						</li>
+						<li>
+							<span class="fa-li"><i class="fas fa-location-dot"></i></span>
+							<p>
+								Level 33, ANZ Centre, 23-29 Albert Street, Auckland CBD 1010
+							</p>
+						</li>
+					</ul>
+				</div>
+				<div class="follow-us">
+					<h3>FOLLOW US</h3>
+					<span class="social-icons">
+						<i class="fa-brands fa-facebook-f"></i>
+						<i class="fa-brands fa-instagram"></i>
+						<i class="fa-brands fa-linkedin-in"></i>
+						<i class="fa-brands fa-x-twitter"></i>
+					</span>
+				</div>
+			</div>
+		</footer>
+
+		<script>
+// Redirect button to confirmation page
+function redirectToConfirmation() {
+        window.location.href = '/confirmation';
+    }
+			// Fetch property data from the server
+			fetch('/fetchProperties')
+				.then((response) => response.json())
+				.then((properties) => {
+					console.log('Properties:', properties);
+					const propertyContainer =
+						document.getElementById('propertyContainer');
+
+					// Loop through each property and create HTML elements
+					properties.forEach((property) => {
+						const propertyDiv = document.createElement('div');
+						propertyDiv.innerHTML = `
+        <img src="${property.imageUrl}" alt="Property Image" class="propertyImage"/>
+        <br><br>
+        <h1>${property.propertyTitle}</h1>
+        <div class="property-details">
+            <div class="details-column" style="color: gray; font-weight: bold;">
+    <p class="rent">$${property.rent} per week</p>
+    <p class="amenities">
+        <i class="fas fa-shower"></i> ${property.bathrooms}
+        <i class="fas fa-bed" style="margin-left: 10px;"></i> ${property.bedrooms}
+        <i class="fas fa-car" style="margin-left: 10px;"></i> ${property.carParks}
+    </p>
+</div>
+            <div class="details-column">
+                <a href="#" class="property-link">
+        <h2>View Property</h2>
+    </a>
+            </div>
+        </div>
+        <div class="available-container">
+    <p>
+        <span style="color: gray; font-weight: bold;">Date Available:</span>
+        <span style="font-weight:bold;">${property.dateAvailable}</span>
+    </p>
+</div>
+
+        <br><br>
+        <!-- Add your other HTML elements here -->
+    `;
+
+						propertyContainer.appendChild(propertyDiv);
+					});
+				})
+				.catch((error) => console.error('Error fetching properties:', error));
+		</script>
+	</body>
+</html>

@@ -1,4 +1,4 @@
-// Server-side code using ES6 syntax
+// app.mjs
 import express from 'express';
 import mongoose from 'mongoose';
 import { fileURLToPath } from 'url';
@@ -12,14 +12,29 @@ const port = 3000;
 
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, '../public')));
+// Serve static files from the 'static' directory
+app.use(express.static(path.join(__dirname, '../static')));
 // Middleware to parse JSON in request body
 app.use(express.json());
 
-app.get('/', (req, res) => {
-	res.sendFile(path.join(__dirname, '../public/index.html'));
+app.get('/booking', async (req, res) => {
+	try {
+		// Fetch property data from MongoDB
+		const properties = await Property.find();
+		// Send the booking page with property data
+		res.sendFile(path.join(__dirname, '../public/booking.html'));
+	} catch (error) {
+		console.error('Error fetching properties:', error);
+		res.status(500).send('Internal Server Error');
+	}
 });
 
-mongoose.connect('mongodb://mongo:27017/mission5');
+app.get('/confirmation', (req, res) => {
+	res.sendFile(path.join(__dirname, '../public/confirmation.html'));
+});
+
+// MongoDB connection using WSL IP so docker can find database
+mongoose.connect('mongodb://172.28.51.156:27017/mission5');
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
@@ -27,38 +42,25 @@ db.once('open', () => {
 	console.log('Connected to MongoDB');
 });
 
-const Message = mongoose.model('Message', {
-	message: String,
+// New model for property data
+const Property = mongoose.model('Property', {
+	imageUrl: String,
+	propertyTitle: String,
+	rent: Number,
+	bathrooms: Number,
+	bedrooms: Number,
+	carParks: Number,
+	dateAvailable: String,
 });
 
-app.post('/submit', async (req, res) => {
+// Route to fetch all properties
+app.get('/fetchProperties', async (req, res) => {
 	try {
-		const { message } = req.body;
-		const newMessage = new Message({ message });
-		await newMessage.save();
-		res.send('Message submitted successfully!');
+		const properties = await Property.find();
+		res.json(properties);
+		console.log(properties);
 	} catch (error) {
-		console.error('Error submitting message:', error);
-		res.status(500).send('Internal Server Error');
-	}
-});
-
-app.get('/fetch', async (req, res) => {
-	try {
-		const messages = await Message.find();
-		res.json(messages);
-	} catch (error) {
-		console.error('Error fetching messages:', error);
-		res.status(500).send('Internal Server Error');
-	}
-});
-
-app.delete('/delete', async (req, res) => {
-	try {
-		await Message.deleteMany(); // Delete all messages
-		res.send('Messages deleted successfully!');
-	} catch (error) {
-		console.error('Error deleting messages:', error);
+		console.error('Error fetching properties:', error);
 		res.status(500).send('Internal Server Error');
 	}
 });
